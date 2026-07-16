@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="南港運動中心健身房即時人數與低人數時段分析">
+  <title>南港健身房｜即時人數追蹤</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">NGSC LIVE · ASIA/TAIPEI</p>
+        <h1>南港健身房<br><span>人潮觀測站</span></h1>
+      </div>
+      <a class="source-link" href="https://ngsc.cyc.org.tw/" target="_blank" rel="noreferrer">官方網站 ↗</a>
+    </header>
+
+    <section class="hero" aria-labelledby="now-title">
+      <div class="hero-copy">
+        <div class="status"><span class="pulse"></span><span id="status-text">讀取中</span></div>
+        <p id="now-title" class="label">目前健身房人數</p>
+        <div class="count-row">
+          <strong id="current">—</strong>
+          <span class="capacity">/ <b id="capacity">—</b> 人</span>
+        </div>
+        <p id="crowd-label" class="crowd-label">正在取得最新資料</p>
+        <p id="updated" class="updated">—</p>
+      </div>
+      <div class="gauge-wrap" aria-label="目前容留率">
+        <div class="gauge" id="gauge"><span id="rate">—</span></div>
+      </div>
+    </section>
+
+    <section class="summary-grid">
+      <article class="card">
+        <p class="label">今日最低</p>
+        <strong id="today-min">—</strong>
+        <small id="today-min-time">尚無資料</small>
+      </article>
+      <article class="card">
+        <p class="label">今日平均</p>
+        <strong id="today-avg">—</strong>
+        <small>開館時間內觀測</small>
+      </article>
+      <article class="card">
+        <p class="label">累積樣本</p>
+        <strong id="sample-count">—</strong>
+        <small>每 5 分鐘更新</small>
+      </article>
+    </section>
+
+    <section class="panel">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">TODAY</p>
+          <h2>今日人數走勢</h2>
+        </div>
+        <p class="hint">06:00–22:00</p>
+      </div>
+      <div id="trend" class="trend" aria-label="今日人數長條圖"></div>
+    </section>
+
+    <section class="panel">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">BEST TIME</p>
+          <h2>什麼時候最適合去？</h2>
+        </div>
+        <div class="range-picker" aria-label="統計期間">
+          <button data-days="7">7 天</button>
+          <button data-days="30" class="active">30 天</button>
+          <button data-days="90">90 天</button>
+          <button data-days="0">全部</button>
+        </div>
+      </div>
+      <div id="recommendations" class="recommendations">
+        <p class="empty">資料累積中。每個時段至少有 3 筆樣本後，才會提供推薦。</p>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">WEEKLY HEATMAP</p>
+          <h2>每週人潮熱度</h2>
+        </div>
+        <p class="hint">綠色越深代表人數越多</p>
+      </div>
+      <div class="heatmap-scroll">
+        <div id="heatmap" class="heatmap" aria-label="星期與時段平均人數熱度圖"></div>
+      </div>
+      <p id="period-note" class="period-note">統計最近 30 天；灰色代表樣本不足。</p>
+    </section>
+
+    <section class="panel">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">RECENT RECORDS</p>
+          <h2>最近觀測紀錄</h2>
+        </div>
+        <p class="hint">每 5 分鐘一筆</p>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>台灣時間</th><th>目前人數</th><th>容留人數</th><th>容留率</th></tr></thead>
+          <tbody id="records"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer>
+      <p>資料來自南港運動中心公開資訊，僅供行程參考；現場狀況可能有延遲。</p>
+      <p>一般開館時間 06:00–22:00 · 台灣時間</p>
+    </footer>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

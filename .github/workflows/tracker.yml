@@ -1,0 +1,45 @@
+name: Update gym tracker
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: gym-tracker
+  cancel-in-progress: false
+
+jobs:
+  update-and-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Collect current occupancy
+        run: python scripts/collect_web.py
+      - name: Save observation
+        run: |
+          git config user.name "ngsc-tracker"
+          git config user.email "ngsc-tracker@users.noreply.github.com"
+          git add web/data/history.json
+          git diff --cached --quiet || git commit -m "data: update gym occupancy"
+          git push
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: web
+      - name: Deploy website
+        id: deployment
+        uses: actions/deploy-pages@v4

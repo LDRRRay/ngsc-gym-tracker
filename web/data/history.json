@@ -1,0 +1,11 @@
+{
+  "timezone": "Asia/Taipei",
+  "source": "https://ngsc.cyc.org.tw/api",
+  "observations": [
+    {
+      "observed_at": "2026-07-17T02:42:14+08:00",
+      "current_people": 0,
+      "capacity": 100
+    }
+  ]
+}
