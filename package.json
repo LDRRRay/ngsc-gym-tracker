@@ -1,0 +1,14 @@
+{
+  "name": "ngsc-gym-tracker",
+  "version": "2.0.0",
+  "private": true,
+  "scripts": {
+    "cf:login": "wrangler login",
+    "cf:db:create": "wrangler d1 create ngsc-gym-tracker",
+    "cf:db:init": "wrangler d1 execute ngsc-gym-tracker --remote --file=schema.sql",
+    "cf:deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^4.24.3"
+  }
+}

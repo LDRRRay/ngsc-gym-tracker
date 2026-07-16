@@ -1,15 +1,12 @@
-name: Update gym tracker
+name: Deploy GitHub Pages fallback
 
 on:
   push:
     branches: [main]
-  schedule:
-    # 每 5 分鐘一次，錯開 GitHub Actions 整點附近的排程尖峰。
-    - cron: "2-59/5 * * * *"
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 
@@ -25,22 +22,6 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: main
-      - name: Sync latest history
-        run: git pull --rebase origin main
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-      - name: Collect current occupancy
-        run: python scripts/collect_web.py
-      - name: Save observation
-        run: |
-          git config user.name "ngsc-tracker"
-          git config user.email "ngsc-tracker@users.noreply.github.com"
-          git add web/data/history.json
-          git diff --cached --quiet || git commit -m "data: update gym occupancy"
-          git push
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

@@ -156,11 +156,26 @@ document.querySelectorAll(".range-picker button").forEach((button) => {
   });
 });
 
-fetch(`data/history.json?v=${Date.now()}`, { cache: "no-store" })
-  .then((response) => {
-    if (!response.ok) throw new Error("資料讀取失敗");
-    return response.json();
-  })
+async function loadHistory() {
+  const apiBase = location.hostname.endsWith("workers.dev")
+    ? ""
+    : "https://ngsc-gym-tracker.raymond60308.workers.dev";
+  const candidates = [
+    `${apiBase}/api/history?days=120&v=${Date.now()}`,
+    `data/history.json?v=${Date.now()}`,
+  ];
+  for (const url of candidates) {
+    try {
+      const response = await fetch(url, { cache: "no-store" });
+      if (response.ok) return response.json();
+    } catch {
+      // Cloudflare API may not exist on the GitHub Pages fallback.
+    }
+  }
+  throw new Error("資料讀取失敗");
+}
+
+loadHistory()
   .then(render)
   .catch((error) => {
     $("status-text").textContent = "暫時無法更新";

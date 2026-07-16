@@ -1,9 +1,12 @@
 # 南港健身房人潮觀測站
 
-[開啟即時人數與歷史統計網站](https://ldrrray.github.io/ngsc-gym-tracker/)
+[開啟即時人數與歷史統計網站](https://ngsc-gym-tracker.raymond60308.workers.dev/)
 
-每 5 分鐘從南港運動中心官網公開介面蒐集健身房目前人數與容留人數，
-並透過 GitHub Pages 提供免下載的歷史統計網站。
+Cloudflare Worker 每 5 分鐘從南港運動中心官網公開介面蒐集健身房目前人數
+與容留人數，寫入 Cloudflare D1，並提供免下載的歷史統計網站。
+
+GitHub Pages 備援網址：
+[https://ldrrray.github.io/ngsc-gym-tracker/](https://ldrrray.github.io/ngsc-gym-tracker/)
 
 網站功能：
 
