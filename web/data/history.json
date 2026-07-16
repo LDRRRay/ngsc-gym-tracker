@@ -26,6 +26,11 @@
       "observed_at": "2026-07-17T03:16:47+08:00",
       "current_people": 0,
       "capacity": 100
+    },
+    {
+      "observed_at": "2026-07-17T03:17:34+08:00",
+      "current_people": 0,
+      "capacity": 100
     }
   ]
 }
