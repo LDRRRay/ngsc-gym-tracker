@@ -45,9 +45,36 @@ function groupedSlots(rows) {
   return groups;
 }
 
+function dateKey(iso) {
+  const part = localParts(iso);
+  return `${part.year}-${part.month}-${part.day}`;
+}
+
+function abnormalClosedDays(rows) {
+  const days = new Map();
+  rows.forEach((row) => {
+    const part = localParts(row.observed_at);
+    const hour = Number(part.hour);
+    if (hour < 9 || hour >= 21) return;
+    const minuteOfDay = hour * 60 + Number(part.minute);
+    const key = dateKey(row.observed_at);
+    const day = days.get(key) || { samples: 0, first: minuteOfDay, last: minuteOfDay, hasPeople: false };
+    day.samples += 1;
+    day.first = Math.min(day.first, minuteOfDay);
+    day.last = Math.max(day.last, minuteOfDay);
+    day.hasPeople ||= row.current_people > 0;
+    days.set(key, day);
+  });
+  return new Set([...days.entries()]
+    .filter(([, day]) => day.samples >= 36 && day.last - day.first >= 180 && !day.hasPeople)
+    .map(([key]) => key));
+}
+
 function renderAnalysis() {
   const rows = filteredRows();
-  const groups = groupedSlots(rows);
+  const closedDays = abnormalClosedDays(rows);
+  const analysisRows = rows.filter((row) => !closedDays.has(dateKey(row.observed_at)));
+  const groups = groupedSlots(analysisRows);
   const best = [...groups.entries()]
     .filter(([key]) => {
       const hour = Number(key.split("|")[1].split(":")[0]);
@@ -99,7 +126,7 @@ function renderAnalysis() {
   });
   $("heatmap").innerHTML = heatmap;
   $("period-note").textContent =
-    `統計${selectedDays ? `最近 ${selectedDays} 天` : "全部歷史"}，共 ${rows.length.toLocaleString("zh-TW")} 筆；灰色代表樣本不足。`;
+    `統計${selectedDays ? `最近 ${selectedDays} 天` : "全部歷史"}，共 ${analysisRows.length.toLocaleString("zh-TW")} 筆有效觀測；灰色代表樣本不足。${closedDays.size ? ` 已排除 ${closedDays.size} 個異常休館日。` : ""}`;
 }
 
 function render(data) {
