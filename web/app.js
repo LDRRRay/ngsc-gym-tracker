@@ -146,7 +146,11 @@ function render(data) {
   }).format(new Date(latest.observed_at))}`;
   $("sample-count").textContent = allRows.length.toLocaleString("zh-TW");
 
-  const today = allRows.filter((row) => sameTaiwanDay(row.observed_at));
+  const today = allRows.filter((row) => {
+    if (!sameTaiwanDay(row.observed_at)) return false;
+    const hour = Number(localParts(row.observed_at).hour);
+    return hour >= 6 && hour < 22;
+  });
   if (today.length) {
     const minimum = today.reduce((a, b) => a.current_people <= b.current_people ? a : b);
     const part = localParts(minimum.observed_at);
