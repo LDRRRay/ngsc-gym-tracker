@@ -49,6 +49,10 @@ function renderAnalysis() {
   const rows = filteredRows();
   const groups = groupedSlots(rows);
   const best = [...groups.entries()]
+    .filter(([key]) => {
+      const hour = Number(key.split("|")[1].split(":")[0]);
+      return hour >= 9 && hour < 21;
+    })
     .filter(([, values]) => values.length >= 3)
     .map(([key, values]) => ({
       key,
