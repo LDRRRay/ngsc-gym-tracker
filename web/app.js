@@ -78,7 +78,7 @@ function renderAnalysis() {
     .filter((values) => values.length >= 3)
     .map((values) => values.reduce((a, b) => a + b, 0) / values.length);
   const max = Math.max(1, ...averages);
-  const colors = ["#eaf3c7", "#b9d991", "#79b575", "#39865c", "#155b42"];
+  const colors = ["#fff1f0", "#ffc9c4", "#ff9187", "#e94f45", "#a91820"];
   let heatmap = `<span></span>${slots.map((slot) => `<span class="heat-time">${slot}</span>`).join("")}`;
   days.forEach((day) => {
     heatmap += `<span class="heat-label">${day}</span>`;
@@ -126,6 +126,7 @@ function render(data) {
   }
 
   const trend = $("trend");
+  trend.innerHTML = "";
   today.filter((row) => {
     const hour = Number(localParts(row.observed_at).hour);
     return hour >= 6 && hour < 22;
@@ -137,6 +138,19 @@ function render(data) {
     bar.dataset.tip = `${part.hour}:${part.minute} · ${row.current_people} 人`;
     trend.appendChild(bar);
   });
+
+  const renderedBars = [...trend.children];
+  const yAxis = document.createElement("div");
+  yAxis.className = "y-axis";
+  yAxis.setAttribute("aria-hidden", "true");
+  yAxis.innerHTML = "<span>100</span><span>75</span><span>50</span><span>25</span><span>0</span>";
+  const barsArea = document.createElement("div");
+  barsArea.className = "trend-bars";
+  barsArea.append(...renderedBars);
+  const xAxis = document.createElement("div");
+  xAxis.className = "x-axis";
+  xAxis.innerHTML = "<span>06:00</span><span>10:00</span><span>14:00</span><span>18:00</span><span>22:00</span>";
+  trend.append(yAxis, barsArea, xAxis);
 
   $("records").innerHTML = allRows.slice(-20).reverse().map((row) => {
     const part = localParts(row.observed_at);
