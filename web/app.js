@@ -135,6 +135,8 @@ function render(data) {
     const bar = document.createElement("div");
     bar.className = "bar";
     bar.style.height = `${Math.max(2, row.current_people / row.capacity * 100)}%`;
+    const minutesSinceOpen = (Number(part.hour) - 6) * 60 + Number(part.minute);
+    bar.style.left = `${minutesSinceOpen / (16 * 60) * 100}%`;
     bar.dataset.tip = `${part.hour}:${part.minute} · ${row.current_people} 人`;
     trend.appendChild(bar);
   });

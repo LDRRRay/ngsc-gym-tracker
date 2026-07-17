@@ -70,7 +70,7 @@ h2 { margin: 8px 0 0; font-size: clamp(25px, 4vw, 38px); letter-spacing: -.04em;
   background: repeating-linear-gradient(to bottom, transparent 0, transparent calc(25% - 1px), var(--line) 25%);
 }
 .x-axis { grid-column: 2; display: flex; justify-content: space-between; padding-top: 8px; color: var(--muted); font-size: 10px; }
-.bar { min-width: 3px; flex: 1; max-width: 18px; border-radius: 5px 5px 0 0; background: var(--green); opacity: .84; position: relative; }
+.bar { position: absolute; bottom: 0; width: max(3px, .52%); border-radius: 5px 5px 0 0; background: var(--green); opacity: .84; transform: translateX(-50%); }
 .bar:hover { opacity: 1; background: var(--orange); }
 .bar:hover::after {
   content: attr(data-tip); position: absolute; bottom: calc(100% + 8px); left: 50%;
