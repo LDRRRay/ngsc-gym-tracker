@@ -78,7 +78,7 @@ function renderAnalysis() {
     .filter((values) => values.length >= 3)
     .map((values) => values.reduce((a, b) => a + b, 0) / values.length);
   const max = Math.max(1, ...averages);
-  const colors = ["#fff1f0", "#ffc9c4", "#ff9187", "#e94f45", "#a91820"];
+  const colors = ["#2878b8", "#83b9d8", "#f5e7c6", "#ef9a72", "#b9252f"];
   let heatmap = `<span></span>${slots.map((slot) => `<span class="heat-time">${slot}</span>`).join("")}`;
   days.forEach((day) => {
     heatmap += `<span class="heat-label">${day}</span>`;
