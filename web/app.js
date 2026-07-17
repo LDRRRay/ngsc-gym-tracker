@@ -109,7 +109,7 @@ function renderAnalysis() {
     .filter((values) => values.length >= 3)
     .map((values) => values.reduce((a, b) => a + b, 0) / values.length);
   const max = Math.max(1, ...averages);
-  const colors = ["#2878b8", "#83b9d8", "#f5e7c6", "#ef9a72", "#b9252f"];
+  const colors = ["#185a9d", "#4f91c3", "#9cc7df", "#f3e8cb", "#f2b184", "#df6b57", "#a71930"];
   let heatmap = `<span></span>${slots.map((slot) => `<span class="heat-time">${slot}</span>`).join("")}`;
   days.forEach((day) => {
     heatmap += `<span class="heat-label">${day}</span>`;
@@ -119,7 +119,7 @@ function renderAnalysis() {
         heatmap += `<span class="heat-cell" title="${day} ${slot}：樣本不足"></span>`;
       } else {
         const average = values.reduce((a, b) => a + b, 0) / values.length;
-        const color = colors[Math.min(4, Math.floor(average / max * 5))];
+        const color = colors[Math.min(colors.length - 1, Math.floor(average / max * colors.length))];
         heatmap += `<span class="heat-cell" style="background:${color}" title="${day} ${slot}：平均 ${average.toFixed(1)} 人（${values.length} 筆）"></span>`;
       }
     });
