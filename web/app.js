@@ -1,4 +1,5 @@
 const TZ = "Asia/Taipei";
+const WEEKDAYS = ["週一", "週二", "週三", "週四", "週五", "週六", "週日"];
 const $ = (id) => document.getElementById(id);
 let allRows = [];
 let selectedDays = 30;
@@ -75,7 +76,7 @@ function renderAnalysis() {
   const closedDays = abnormalClosedDays(rows);
   const analysisRows = rows.filter((row) => !closedDays.has(dateKey(row.observed_at)));
   const groups = groupedSlots(analysisRows);
-  const best = [...groups.entries()]
+  const candidates = [...groups.entries()]
     .filter(([key]) => {
       const hour = Number(key.split("|")[1].split(":")[0]);
       return hour >= 9 && hour < 21;
@@ -86,32 +87,39 @@ function renderAnalysis() {
       samples: values.length,
       average: values.reduce((a, b) => a + b, 0) / values.length
     }))
-    .sort((a, b) => a.average - b.average || b.samples - a.samples)
-    .slice(0, 8);
+    .sort((a, b) => a.average - b.average || b.samples - a.samples);
+  const bestByDay = WEEKDAYS.map((day) => ({
+    day,
+    item: candidates.find((candidate) => candidate.key.startsWith(`${day}|`)) || null
+  }));
 
-  $("recommendations").innerHTML = best.length
-    ? best.map((item, index) => {
-      const [day, slot] = item.key.split("|");
+  $("recommendations").innerHTML = bestByDay.map(({ day, item }) => {
+    if (item) {
+      const [, slot] = item.key.split("|");
       return `<div class="recommendation">
-        <span class="rank">#${index + 1}</span>
-        <span class="slot">${day} ${slot}</span>
+        <span class="rank">${day}</span>
+        <span class="slot">${slot}</span>
         <span class="avg">平均 ${item.average.toFixed(1)} 人 <small>· ${item.samples} 筆樣本</small></span>
       </div>`;
-    }).join("")
-    : `<p class="empty">資料累積中。每個時段至少有 3 筆樣本後，才會提供推薦。</p>`;
+    }
+    return `<div class="recommendation unavailable">
+      <span class="rank">${day}</span>
+      <span class="slot">資料不足</span>
+      <span class="avg"><small>每個時段至少需要 3 筆樣本</small></span>
+    </div>`;
+  }).join("");
 
   const slots = Array.from({ length: 32 }, (_, index) => {
     const total = 360 + index * 30;
     return `${String(Math.floor(total / 60)).padStart(2, "0")}:${total % 60 ? "30" : "00"}`;
   });
-  const days = ["週一", "週二", "週三", "週四", "週五", "週六", "週日"];
   const averages = [...groups.values()]
     .filter((values) => values.length >= 3)
     .map((values) => values.reduce((a, b) => a + b, 0) / values.length);
   const max = Math.max(1, ...averages);
   const colors = ["#185a9d", "#4f91c3", "#9cc7df", "#f3e8cb", "#f2b184", "#df6b57", "#a71930"];
   let heatmap = `<span></span>${slots.map((slot) => `<span class="heat-time">${slot}</span>`).join("")}`;
-  days.forEach((day) => {
+  WEEKDAYS.forEach((day) => {
     heatmap += `<span class="heat-label">${day}</span>`;
     slots.forEach((slot) => {
       const values = groups.get(`${day}|${slot}`) || [];

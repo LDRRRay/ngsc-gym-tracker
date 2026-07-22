@@ -82,6 +82,7 @@ h2 { margin: 8px 0 0; font-size: clamp(25px, 4vw, 38px); letter-spacing: -.04em;
 .rank { color: var(--green); font: 800 13px ui-monospace, monospace; }
 .slot { font-weight: 800; font-size: 18px; }
 .recommendation small, .empty { color: var(--muted); }
+.recommendation.unavailable { opacity: .62; }
 .avg { font-weight: 800; }
 .range-picker { display: flex; gap: 5px; padding: 4px; border: 1px solid var(--line); border-radius: 12px; }
 .range-picker button { border: 0; border-radius: 8px; padding: 8px 11px; color: var(--muted); background: transparent; font: inherit; font-size: 12px; cursor: pointer; }
